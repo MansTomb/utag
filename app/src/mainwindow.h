@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtWidgets/QTableWidgetItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -12,14 +13,17 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(const QString& initialFolder = "", QWidget *parent = nullptr);
     ~MainWindow();
 
-public slots:
-    void fileUploaded();
-
 private slots:
-    void on_pushButton_clicked();
+    void on_tableWidget_cellActivated(int row, int column);
+
+    void on_tableWidget_currentCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn);
+
+    void on_tableWidget_currentItemChanged(QTableWidgetItem *current, QTableWidgetItem *previous);
+
+    void on_tableWidget_cellChanged(int row, int column);
 
 private:
     Ui::MainWindow *ui;
