@@ -6,7 +6,7 @@ MainWindow::MainWindow(const QString& initialFolder, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->tableWidget->setColumnHidden(5, true);
+    ui->tableWidget->setColumnHidden(6, true);
     if (!initialFolder.isEmpty())
         ui->tableWidget->UpdateTable(initialFolder);
 }
@@ -16,22 +16,21 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_tableWidget_cellActivated(int row, int column)
+void MainWindow::on_ApplyButton_clicked()
 {
+    DropTableWidget *table = ui->tableWidget;
+    Tagger tagger;
 
-}
-
-void MainWindow::on_tableWidget_currentCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn)
-{
-
-}
-
-void MainWindow::on_tableWidget_currentItemChanged(QTableWidgetItem *current, QTableWidgetItem *previous)
-{
-
-}
-
-void MainWindow::on_tableWidget_cellChanged(int row, int column)
-{
-
+    for (int i = 0; i < table->rowCount(); ++i) {
+        tagger.UpdateTagsInFile({
+            table->item(i, 0)->text(),
+            table->item(i, 1)->text(),
+            table->item(i, 2)->text(),
+            table->item(i, 3)->text(),
+            table->item(i, 4)->text(),
+            table->item(i, 5)->text(),
+            table->item(i, 6)->text()
+        });
+    }
+    ui->statusbar->showMessage("Change was applied to files!");
 }

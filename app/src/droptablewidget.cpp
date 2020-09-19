@@ -24,37 +24,26 @@ void DropTableWidget::dropEvent(QDropEvent *event) {
         UpdateTable(urlList);
         event->acceptProposedAction();
     }
-    emit Notify("You dropped directories to table successfully!");
 }
 
 void DropTableWidget::UpdateTable(QList<QUrl> &urlList) {
-    DirProcess processer;
-    QList<QFileInfo> filesInDir;
-    try {
-        filesInDir = processer.ProcessDirectories(urlList);
-    }
-    catch (std::invalid_argument& e) {
-        emit Notify(e.what());
-        return;
-    }
-    for (const auto &file : filesInDir) {
-        if (!files.contains(file.absoluteFilePath())) {
-            insertRow(rowCount());
-            setItem(rowCount() - 1, 0, new QTableWidgetItem(file.fileName()));
-        }
-        files.insert(file.absoluteFilePath());
-    }
-    emit Notify("Table was updated successfully!");
+    for (const auto &url : urlList)
+        UpdateTable(url.path());
 }
 
 void DropTableWidget::UpdateTable(QString directory) {
     DirProcess processer;
-
     try {
-        for (const auto &file : processer.ProcessDirectory(directory)) {
-            if (!files.contains(file.absoluteFilePath()))
-                CreateElement(file.fileName(), file.absoluteFilePath());
-            files.insert(file.absoluteFilePath());
+        QList<QFileInfo> list;
+        if (AcceptRecursive)
+            list = processer.ProcessDirectoryRecursively(directory);
+        else
+            list = processer.ProcessDirectory(directory);
+        for (const auto &file : list) {
+            if (findItems(file.absoluteFilePath(), Qt::MatchContains).isEmpty()) {
+                Tagger tagger;
+                CreateElement(tagger.ReadFile(file.absoluteFilePath()));
+            }
         }
     }
     catch (std::invalid_argument& e) {
@@ -66,36 +55,46 @@ void DropTableWidget::UpdateTable(QString directory) {
 void DropTableWidget::commitData(QWidget *editor) {
     QAbstractItemView::commitData(editor);
 
-    for (auto &item : selectedIndexes()) {
+    for (auto &item : selectedIndexes())
         model()->setData(item, currentItem()->data(Qt::EditRole), Qt::EditRole);
-    }
 }
 void DropTableWidget::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Delete) {
-        auto selected = selectedItems();
-        QList<int> rows;
-        for (const auto &item : selected)
-            rows.append(item->row());
-        qSort(rows);
-        rows.erase(std::unique(rows.begin(), rows.end()), rows.end());
-        for (int i = rows.count() - 1; i >= 0; i--) {
-            files.remove(item(rows[i], 5)->text());
+        QList<int> rows = getRowsToDelete();
+        for (int i = rows.count() - 1; i >= 0; i--)
             removeRow(rows[i]);
-        }
     }
     else
         QAbstractItemView::keyPressEvent(event);
 }
+QList<int> DropTableWidget::getRowsToDelete() const {
+    auto selected = selectedItems();
+    QList<int> rows;
+
+    for (const auto &item : selected)
+        rows.append(item->row());
+    qSort(rows);
+    rows.erase(std::unique(rows.begin(), rows.end()), rows.end());
+    return rows;
+}
 
 void DropTableWidget::ClearTable() {
-    files.clear();
     model()->removeRows(0, model()->rowCount());
     emit Notify("Table was cleared successfully!");
 }
 
-void DropTableWidget::CreateElement(QString fname, QString absPath) {
+void DropTableWidget::CreateElement(AudioFile file) {
     insertRow(rowCount());
-    setItem(rowCount() - 1, 0, new QTableWidgetItem(fname));
-    setItem(rowCount() - 1, 5, new QTableWidgetItem(absPath));
+    setItem(rowCount() - 1, 0, new QTableWidgetItem(file.fname));
+    setItem(rowCount() - 1, 1, new QTableWidgetItem(file.sname));
+    setItem(rowCount() - 1, 2, new QTableWidgetItem(file.artist));
+    setItem(rowCount() - 1, 3, new QTableWidgetItem(file.album));
+    setItem(rowCount() - 1, 4, new QTableWidgetItem(file.genre));
+    setItem(rowCount() - 1, 5, new QTableWidgetItem(file.year));
+    setItem(rowCount() - 1, 6, new QTableWidgetItem(file.absPath));
+}
+
+void DropTableWidget::ProccessType(bool type) {
+    AcceptRecursive = type;
 }
 

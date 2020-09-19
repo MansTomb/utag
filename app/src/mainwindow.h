@@ -17,13 +17,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_tableWidget_cellActivated(int row, int column);
-
-    void on_tableWidget_currentCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn);
-
-    void on_tableWidget_currentItemChanged(QTableWidgetItem *current, QTableWidgetItem *previous);
-
-    void on_tableWidget_cellChanged(int row, int column);
+    void on_ApplyButton_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -6,6 +6,7 @@
 #include <QtCore/QMimeData>
 #include <QtWidgets/QTableWidget>
 #include <QtCore/QFileInfo>
+#include "tagger.h"
 
 class DropTableWidget : public QTableWidget {
     Q_OBJECT
@@ -23,10 +24,13 @@ class DropTableWidget : public QTableWidget {
 
 public slots:
     void ClearTable();
+    void ProccessType(bool type);
 signals:
     void Notify(QString message);
  private:
-    QSet<QString> files;
+    bool AcceptRecursive = {false};
+
     void UpdateTable(QList<QUrl> &urlList);
-    void CreateElement(QString fname, QString absPath);
+    void CreateElement(AudioFile file);
+    QList<int> getRowsToDelete() const;
 };

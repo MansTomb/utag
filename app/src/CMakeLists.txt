@@ -1,4 +1,9 @@
-set(SOURCES mainwindow.ui mainwindow.cpp mainwindow.h droptablewidget.cpp droptablewidget.h DirProcess.cpp DirProcess.h)
+set(SOURCES
+    mainwindow.ui mainwindow.cpp mainwindow.h
+    droptablewidget.cpp droptablewidget.h
+    DirProcess.cpp DirProcess.h
+    tagger.cpp tagger.h
+)
 
 add_library(src ${SOURCES})
 target_link_libraries(src PRIVATE Qt${QT_VERSION_MAJOR}::Core
