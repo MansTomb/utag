@@ -17,7 +17,10 @@ QDir DirProcess::getDir(const QUrl &directory) const {
         path.remove(0, 1);
     if (path.at(path.size() - 1) != '/')
         path += "/";
-    return QDir(path);
+    QDir dir(path);
+    if (!dir.exists() || !dir.isReadable())
+        throw std::invalid_argument(dir.path().toStdString() + " not exist or not readable!");
+    return dir;
 }
 
 QList<QFileInfo> DirProcess::ProcessDirectory(QString directory) {
@@ -25,10 +28,7 @@ QList<QFileInfo> DirProcess::ProcessDirectory(QString directory) {
     if (file.exists() && file.isFile() && file.isReadable() && file.isWritable())
         return QList<QFileInfo>() += file;
     QDir dir = getDir(directory);
-    if (!dir.exists() || !dir.isReadable())
-        throw std::invalid_argument(dir.path().toStdString() + " not exist or not readable!");
-
-    auto list = dir.entryInfoList();
+    QList<QFileInfo> list = dir.entryInfoList();
 
     list.erase(std::remove_if(list.begin(), list.end(), [](QFileInfo &item) {
         return item.isDir() || !item.fileName().contains(QRegExp(".mp3"));
@@ -41,11 +41,9 @@ QList<QFileInfo> DirProcess::ProcessDirectoryRecursively(QString directory) {
     if (file.exists() && file.isFile() && file.isReadable() && file.isWritable())
         return QList<QFileInfo>() += file;
     QDir dir = getDir(directory);
-    if (!dir.exists() || !dir.isReadable())
-        throw std::invalid_argument(dir.path().toStdString() + " not exist or not readable!");
-
     QList<QFileInfo> list = dir.entryInfoList();
     QList<QFileInfo> listOfDirs;
+
     std::copy_if(list.begin(), list.end(), std::back_inserter(listOfDirs), [](QFileInfo& i) {
         return i.fileName() != "." && i.fileName() != ".." && i.exists() && i.isDir() && i.isReadable();
     });
