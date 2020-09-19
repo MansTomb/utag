@@ -50,7 +50,7 @@ void DropTableWidget::UpdateTable(QString directory) {
         emit Notify(e.what());
         return;
     }
-    emit Notify("Table was updated successfully!");
+    emit Notify(directory.append(" was added to table successfully!").prepend("Files from"));
 }
 void DropTableWidget::commitData(QWidget *editor) {
     QAbstractItemView::commitData(editor);

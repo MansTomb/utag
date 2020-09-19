@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="DropTableWidget" name="tableWidget">
         <property name="sizePolicy">
@@ -90,6 +90,25 @@
         </column>
        </widget>
       </item>
+      <item>
+       <widget class="Logger" name="textEdit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>500</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item row="2" column="0">
@@ -130,7 +149,14 @@
     <addaction name="separator"/>
     <addaction name="actionRecursive"/>
    </widget>
+   <widget class="QMenu" name="menuOpen_Loger">
+    <property name="title">
+     <string>Logs</string>
+    </property>
+    <addaction name="actionOpen_Logs"/>
+   </widget>
    <addaction name="MainMenu"/>
+   <addaction name="menuOpen_Loger"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionClear_Table">
@@ -146,6 +172,14 @@
     <string>Recursive?</string>
    </property>
   </action>
+  <action name="actionOpen_Logs">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Open Logs</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -158,25 +192,17 @@
     <slot>ProccessType(bool)</slot>
    </slots>
   </customwidget>
+  <customwidget>
+   <class>Logger</class>
+   <extends>QTextEdit</extends>
+   <header>logger.h</header>
+   <slots>
+    <slot>WriteToLog(QString)</slot>
+   </slots>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>actionClear_Table</sender>
-   <signal>triggered()</signal>
-   <receiver>tableWidget</receiver>
-   <slot>ClearTable()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>291</x>
-     <y>120</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>tableWidget</sender>
    <signal>Notify(QString)</signal>
@@ -205,6 +231,54 @@
     </hint>
     <hint type="destinationlabel">
      <x>288</x>
+     <y>117</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClear_Table</sender>
+   <signal>triggered()</signal>
+   <receiver>tableWidget</receiver>
+   <slot>ClearTable()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>291</x>
+     <y>120</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>Notify(QString)</signal>
+   <receiver>textEdit</receiver>
+   <slot>WriteToLog(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>147</x>
+     <y>117</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>429</x>
+     <y>117</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionOpen_Logs</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>textEdit</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>429</x>
      <y>117</y>
     </hint>
    </hints>

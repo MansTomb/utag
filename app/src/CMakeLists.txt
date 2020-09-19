@@ -3,6 +3,7 @@ set(SOURCES
     droptablewidget.cpp droptablewidget.h
     DirProcess.cpp DirProcess.h
     tagger.cpp tagger.h
+    logger.cpp logger.h
 )
 
 add_library(src ${SOURCES})

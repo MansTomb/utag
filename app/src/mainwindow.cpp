@@ -6,6 +6,7 @@ MainWindow::MainWindow(const QString& initialFolder, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->textEdit->hide();
     if (!initialFolder.isEmpty())
         ui->tableWidget->UpdateTable(initialFolder);
 }
