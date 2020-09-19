@@ -119,16 +119,68 @@
      <height>20</height>
     </rect>
    </property>
+   <widget class="QMenu" name="MainMenu">
+    <property name="title">
+     <string>Menu</string>
+    </property>
+    <property name="separatorsCollapsible">
+     <bool>false</bool>
+    </property>
+    <addaction name="actionClear_Table"/>
+   </widget>
+   <addaction name="MainMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionClear_Table">
+   <property name="text">
+    <string>Clear Table</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>DropTableWidget</class>
    <extends>QTableWidget</extends>
    <header>droptablewidget.h</header>
+   <slots>
+    <signal>Notify(QString)</signal>
+    <slot>ClearTable()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionClear_Table</sender>
+   <signal>triggered()</signal>
+   <receiver>tableWidget</receiver>
+   <slot>ClearTable()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>291</x>
+     <y>120</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>Notify(QString)</signal>
+   <receiver>statusbar</receiver>
+   <slot>showMessage(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>291</x>
+     <y>120</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>288</x>
+     <y>252</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

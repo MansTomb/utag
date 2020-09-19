@@ -24,32 +24,44 @@ void DropTableWidget::dropEvent(QDropEvent *event) {
         UpdateTable(urlList);
         event->acceptProposedAction();
     }
+    emit Notify("You dropped directories to table successfully!");
 }
 
 void DropTableWidget::UpdateTable(QList<QUrl> &urlList) {
     DirProcess processer;
-    for (const auto &url : urlList) {
-        auto filesInDir = processer.ProcessDirectory(url.path());
-        for (const auto &file : filesInDir) {
-            if (!files.contains(file.absoluteFilePath())) {
-                insertRow(rowCount());
-                setItem(rowCount() - 1, 0, new QTableWidgetItem(file.fileName()));
-            }
-            files.insert(file.absoluteFilePath());
-        }
+    QList<QFileInfo> filesInDir;
+    try {
+        filesInDir = processer.ProcessDirectories(urlList);
     }
-}
-
-void DropTableWidget::UpdateTable(QString directory) {
-    DirProcess processer;
-
-    for (const auto &file : processer.ProcessDirectory(directory)) {
+    catch (std::invalid_argument& e) {
+        emit Notify(e.what());
+        return;
+    }
+    for (const auto &file : filesInDir) {
         if (!files.contains(file.absoluteFilePath())) {
             insertRow(rowCount());
             setItem(rowCount() - 1, 0, new QTableWidgetItem(file.fileName()));
         }
         files.insert(file.absoluteFilePath());
     }
+    emit Notify("Table was updated successfully!");
+}
+
+void DropTableWidget::UpdateTable(QString directory) {
+    DirProcess processer;
+
+    try {
+        for (const auto &file : processer.ProcessDirectory(directory)) {
+            if (!files.contains(file.absoluteFilePath()))
+                CreateElement(file.fileName(), file.absoluteFilePath());
+            files.insert(file.absoluteFilePath());
+        }
+    }
+    catch (std::invalid_argument& e) {
+        emit Notify(e.what());
+        return;
+    }
+    emit Notify("Table was updated successfully!");
 }
 void DropTableWidget::commitData(QWidget *editor) {
     QAbstractItemView::commitData(editor);
@@ -67,13 +79,23 @@ void DropTableWidget::keyPressEvent(QKeyEvent *event) {
         qSort(rows);
         rows.erase(std::unique(rows.begin(), rows.end()), rows.end());
         for (int i = rows.count() - 1; i >= 0; i--) {
-            files.remove(itemAt(rows[i], 5)->text());
-            if (i == 0)
-                setEditTriggers(QAbstractItemView::NoEditTriggers);
+            files.remove(item(rows[i], 5)->text());
             removeRow(rows[i]);
         }
-        setEditTriggers(QAbstractItemView::DoubleClicked);
     }
     else
         QAbstractItemView::keyPressEvent(event);
 }
+
+void DropTableWidget::ClearTable() {
+    files.clear();
+    model()->removeRows(0, model()->rowCount());
+    emit Notify("Table was cleared successfully!");
+}
+
+void DropTableWidget::CreateElement(QString fname, QString absPath) {
+    insertRow(rowCount());
+    setItem(rowCount() - 1, 0, new QTableWidgetItem(fname));
+    setItem(rowCount() - 1, 5, new QTableWidgetItem(absPath));
+}
+
