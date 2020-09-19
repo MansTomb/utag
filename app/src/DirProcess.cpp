@@ -4,17 +4,26 @@
 #include <QDebug>
 #include "DirProcess.h"
 
+QFileInfo DirProcess::getFile(const QUrl &file) const {
+    auto path = file.url();
+    if (path.at(0) == '/')
+        path.remove(0, 1);
+    return QFileInfo(path);
+}
+
 QDir DirProcess::getDir(const QUrl &directory) const {
     auto path = directory.url();
     if (path.at(0) == '/')
         path.remove(0, 1);
     if (path.at(path.size() - 1) != '/')
         path += "/";
-    QDir dir(path);
-    return dir;
+    return QDir(path);
 }
 
 QList<QFileInfo> DirProcess::ProcessDirectory(QString directory) {
+    auto file = getFile(directory);
+    if (file.exists() && file.isFile() && file.isReadable() && file.isWritable())
+        return QList<QFileInfo>() += file;
     QDir dir = getDir(directory);
     if (!dir.exists() || !dir.isReadable())
         throw std::invalid_argument(dir.path().toStdString() + " not exist or not readable!");
@@ -28,6 +37,9 @@ QList<QFileInfo> DirProcess::ProcessDirectory(QString directory) {
 }
 
 QList<QFileInfo> DirProcess::ProcessDirectoryRecursively(QString directory) {
+    auto file = getFile(directory);
+    if (file.exists() && file.isFile() && file.isReadable() && file.isWritable())
+        return QList<QFileInfo>() += file;
     QDir dir = getDir(directory);
     if (!dir.exists() || !dir.isReadable())
         throw std::invalid_argument(dir.path().toStdString() + " not exist or not readable!");

@@ -40,7 +40,7 @@ void DropTableWidget::UpdateTable(QString directory) {
         else
             list = processer.ProcessDirectory(directory);
         for (const auto &file : list) {
-            if (findItems(file.absoluteFilePath(), Qt::MatchContains).isEmpty()) {
+            if (findItems(file.absoluteFilePath(), Qt::MatchExactly).isEmpty()) {
                 Tagger tagger;
                 CreateElement(tagger.ReadFile(file.absoluteFilePath()));
             }

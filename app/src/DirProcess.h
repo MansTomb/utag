@@ -8,4 +8,5 @@ class DirProcess {
     QList<QFileInfo> ProcessDirectoryRecursively(QString directory);
  private:
     QDir getDir(const QUrl &directory) const;
+    QFileInfo getFile(const QUrl &file) const;
 };
