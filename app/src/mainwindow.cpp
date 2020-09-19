@@ -6,7 +6,6 @@ MainWindow::MainWindow(const QString& initialFolder, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->tableWidget->setColumnHidden(6, true);
     if (!initialFolder.isEmpty())
         ui->tableWidget->UpdateTable(initialFolder);
 }
@@ -28,8 +27,7 @@ void MainWindow::on_ApplyButton_clicked()
             table->item(i, 2)->text(),
             table->item(i, 3)->text(),
             table->item(i, 4)->text(),
-            table->item(i, 5)->text(),
-            table->item(i, 6)->text()
+            table->item(i, 5)->text()
         });
     }
     ui->statusbar->showMessage("Change was applied to files!");

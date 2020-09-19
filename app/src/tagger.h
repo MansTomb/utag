@@ -4,8 +4,7 @@
 #include <QObject>
 
 struct AudioFile {
-    QString fname;
-    QString sname;
+    QString title;
     QString artist;
     QString album;
     QString genre;

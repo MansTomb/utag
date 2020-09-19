@@ -85,13 +85,14 @@ void DropTableWidget::ClearTable() {
 
 void DropTableWidget::CreateElement(AudioFile file) {
     insertRow(rowCount());
-    setItem(rowCount() - 1, 0, new QTableWidgetItem(file.fname));
-    setItem(rowCount() - 1, 1, new QTableWidgetItem(file.sname));
-    setItem(rowCount() - 1, 2, new QTableWidgetItem(file.artist));
-    setItem(rowCount() - 1, 3, new QTableWidgetItem(file.album));
-    setItem(rowCount() - 1, 4, new QTableWidgetItem(file.genre));
-    setItem(rowCount() - 1, 5, new QTableWidgetItem(file.year));
-    setItem(rowCount() - 1, 6, new QTableWidgetItem(file.absPath));
+    setItem(rowCount() - 1, 0, new QTableWidgetItem(file.title));
+    setItem(rowCount() - 1, 1, new QTableWidgetItem(file.artist));
+    setItem(rowCount() - 1, 2, new QTableWidgetItem(file.album));
+    setItem(rowCount() - 1, 3, new QTableWidgetItem(file.genre));
+    setItem(rowCount() - 1, 4, new QTableWidgetItem(file.year));
+    QTableWidgetItem *item = new QTableWidgetItem(file.absPath);
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable ^ Qt::ItemIsSelectable);
+    setItem(rowCount() - 1, 5, item);
 }
 
 void DropTableWidget::ProccessType(bool type) {

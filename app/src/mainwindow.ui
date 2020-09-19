@@ -44,7 +44,7 @@
          <bool>true</bool>
         </property>
         <property name="columnCount">
-         <number>7</number>
+         <number>6</number>
         </property>
         <attribute name="horizontalHeaderVisible">
          <bool>true</bool>
@@ -60,12 +60,7 @@
         </attribute>
         <column>
          <property name="text">
-          <string>File Name</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Song Name</string>
+          <string>Title</string>
          </property>
         </column>
         <column>
@@ -90,7 +85,7 @@
         </column>
         <column>
          <property name="text">
-          <string>FilePath</string>
+          <string>File Path</string>
          </property>
         </column>
        </widget>
