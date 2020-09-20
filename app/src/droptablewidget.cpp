@@ -7,23 +7,11 @@ DropTableWidget::DropTableWidget(QWidget *parent) : QTableWidget(parent) {
     setAcceptDrops(true);
 }
 
-void DropTableWidget::dragEnterEvent(QDragEnterEvent *event) {
-    event->acceptProposedAction();
-}
-
-void DropTableWidget::dragMoveEvent(QDragMoveEvent *event) {
-    event->accept();
-}
-void DropTableWidget::dragLeaveEvent(QDragLeaveEvent *event) {
-    event->accept();
-}
-
 void DropTableWidget::dropEvent(QDropEvent *event) {
     const QMimeData *mimeData = event->mimeData();
     if (mimeData->hasUrls() && OpenDialog()) {
         QList<QUrl> urlList = mimeData->urls();
-        if (!m_Append)
-            ClearTable();
+        m_Append ? static_cast<void>(nullptr) : ClearTable();
         UpdateTable(urlList);
         event->acceptProposedAction();
     }
@@ -36,6 +24,7 @@ void DropTableWidget::UpdateTable(QList<QUrl> &urlList) {
 
 void DropTableWidget::UpdateTable(QString directory) {
     DirProcess processer;
+
     try {
         for (const auto &file : processer.Process(directory, m_AcceptRecursive)) {
             if (findItems(file.absoluteFilePath(), Qt::MatchExactly).isEmpty()) {
@@ -52,12 +41,14 @@ void DropTableWidget::UpdateTable(QString directory) {
     }
     emit Notify(directory.append(" was added to table successfully!").prepend("Files from"));
 }
+
 void DropTableWidget::commitData(QWidget *editor) {
     QAbstractItemView::commitData(editor);
 
     for (auto &item : selectedIndexes())
         model()->setData(item, currentItem()->data(Qt::EditRole), Qt::EditRole);
 }
+
 void DropTableWidget::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Delete) {
         QList<int> rows = getRowsToDelete();
@@ -67,6 +58,7 @@ void DropTableWidget::keyPressEvent(QKeyEvent *event) {
     else
         QAbstractItemView::keyPressEvent(event);
 }
+
 QList<int> DropTableWidget::getRowsToDelete() const {
     auto selected = selectedItems();
     QList<int> rows;
@@ -84,18 +76,19 @@ void DropTableWidget::ClearTable() {
 }
 
 void DropTableWidget::CreateElement(AudioFile file) {
+    auto *year = new QTableWidgetItem();
+    auto *absPath = new QTableWidgetItem(file.absPath);
+
+    if (file.year != 0)
+        year->setData(Qt::EditRole, file.year);
+    absPath->setFlags(absPath->flags() ^ Qt::ItemIsEditable ^ Qt::ItemIsSelectable);
     insertRow(rowCount());
     setItem(rowCount() - 1, 0, new QTableWidgetItem(file.title));
     setItem(rowCount() - 1, 1, new QTableWidgetItem(file.artist));
     setItem(rowCount() - 1, 2, new QTableWidgetItem(file.album));
     setItem(rowCount() - 1, 3, new QTableWidgetItem(file.genre));
-    QTableWidgetItem *year = new QTableWidgetItem();
-    if (file.year != 0)
-        year->setData(Qt::EditRole, file.year);
     setItem(rowCount() - 1, 4, year);
-    QTableWidgetItem *item = new QTableWidgetItem(file.absPath);
-    item->setFlags(item->flags() ^ Qt::ItemIsEditable ^ Qt::ItemIsSelectable);
-    setItem(rowCount() - 1, 5, item);
+    setItem(rowCount() - 1, 5, absPath);
 }
 
 void DropTableWidget::ProcessOptions(QString tag, bool recursive, bool append) {

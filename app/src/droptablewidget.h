@@ -15,9 +15,9 @@ class DropTableWidget : public QTableWidget {
     explicit DropTableWidget(QWidget *parent = Q_NULLPTR);
     void UpdateTable(QString directory);
  protected:
-    void dragEnterEvent(QDragEnterEvent *event) override;
-    void dragMoveEvent(QDragMoveEvent *event) override;
-    void dragLeaveEvent(QDragLeaveEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override {event->acceptProposedAction();}
+    void dragMoveEvent(QDragMoveEvent *event) override {event->accept();}
+    void dragLeaveEvent(QDragLeaveEvent *event) override {event->accept();}
     void dropEvent(QDropEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void commitData(QWidget *editor) override;
