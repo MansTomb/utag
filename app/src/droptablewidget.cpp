@@ -34,12 +34,7 @@ void DropTableWidget::UpdateTable(QList<QUrl> &urlList) {
 void DropTableWidget::UpdateTable(QString directory) {
     DirProcess processer;
     try {
-        QList<QFileInfo> list;
-        if (AcceptRecursive)
-            list = processer.ProcessDirectoryRecursively(directory);
-        else
-            list = processer.ProcessDirectory(directory);
-        for (const auto &file : list) {
+        for (const auto &file : processer.Process(directory, AcceptRecursive)) {
             if (findItems(file.absoluteFilePath(), Qt::MatchExactly).isEmpty()) {
                 Tagger tagger;
                 CreateElement(tagger.ReadFile(file.absoluteFilePath()));

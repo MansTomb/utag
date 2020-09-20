@@ -23,10 +23,14 @@ QDir DirProcess::getDir(const QUrl &directory) const {
     return dir;
 }
 
-QList<QFileInfo> DirProcess::ProcessDirectory(QString directory) {
+QList<QFileInfo> DirProcess::ProcessFile(const QString &directory) const {
     auto file = getFile(directory);
     if (file.exists() && file.isFile() && file.isReadable() && file.isWritable())
         return QList<QFileInfo>() += file;
+    return QList<QFileInfo>();
+}
+
+QList<QFileInfo> DirProcess::ProcessDirectory(const QString &directory) {
     QDir dir = getDir(directory);
     QList<QFileInfo> list = dir.entryInfoList();
 
@@ -36,10 +40,7 @@ QList<QFileInfo> DirProcess::ProcessDirectory(QString directory) {
     return list;
 }
 
-QList<QFileInfo> DirProcess::ProcessDirectoryRecursively(QString directory) {
-    auto file = getFile(directory);
-    if (file.exists() && file.isFile() && file.isReadable() && file.isWritable())
-        return QList<QFileInfo>() += file;
+QList<QFileInfo> DirProcess::ProcessDirectoryRecursively(const QString &directory) {
     QDir dir = getDir(directory);
     QList<QFileInfo> list = dir.entryInfoList();
     QList<QFileInfo> listOfDirs;
@@ -53,4 +54,12 @@ QList<QFileInfo> DirProcess::ProcessDirectoryRecursively(QString directory) {
     for (const auto &item : listOfDirs)
         list += ProcessDirectoryRecursively(item.absoluteFilePath());
     return list;
+}
+
+QList<QFileInfo> DirProcess::Process(const QString &directory, bool Recursive) {
+    if (!ProcessFile(directory).empty())
+        return ProcessFile(directory);
+    if (Recursive)
+        return ProcessDirectoryRecursively(directory);
+    return ProcessDirectory(directory);
 }
