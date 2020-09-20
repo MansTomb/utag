@@ -28,9 +28,9 @@ public slots:
 signals:
     void Notify(QString message);
  private:
-    bool AcceptRecursive = {false};
-    bool Append = {false};
-    QStringList tag;
+    bool m_AcceptRecursive = {false};
+    bool m_Append = {false};
+    QStringList m_tag;
 
     void UpdateTable(QList<QUrl> &urlList);
     void CreateElement(AudioFile file);

@@ -12,6 +12,7 @@ Tagger::Tagger(QObject *parent) : QObject(parent) {
 AudioFile Tagger::ReadFile(const QString &absPath) {
     QFileInfo info(absPath);
     TagLib::FileRef f(absPath.toStdWString().c_str());
+
     if (info.exists() && info.isReadable() && info.isWritable())
         return {f.tag()->title().toCString(true),
                 f.tag()->artist().toCString(true),

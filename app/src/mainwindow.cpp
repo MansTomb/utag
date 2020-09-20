@@ -35,5 +35,6 @@ void MainWindow::on_ApplyButton_clicked()
             table->item(i, 5)->text()
         });
     }
-    ui->statusbar->showMessage("Change was applied to files!");
+    ui->textEdit->WriteToLog("Changes was applied to files!");
+    ui->statusbar->showMessage("Changes was applied to files!");
 }

@@ -22,7 +22,7 @@ void DropTableWidget::dropEvent(QDropEvent *event) {
     const QMimeData *mimeData = event->mimeData();
     if (mimeData->hasUrls() && OpenDialog()) {
         QList<QUrl> urlList = mimeData->urls();
-        if (!Append)
+        if (!m_Append)
             ClearTable();
         UpdateTable(urlList);
         event->acceptProposedAction();
@@ -37,7 +37,7 @@ void DropTableWidget::UpdateTable(QList<QUrl> &urlList) {
 void DropTableWidget::UpdateTable(QString directory) {
     DirProcess processer;
     try {
-        for (const auto &file : processer.Process(directory, AcceptRecursive)) {
+        for (const auto &file : processer.Process(directory, m_AcceptRecursive)) {
             if (findItems(file.absoluteFilePath(), Qt::MatchExactly).isEmpty()) {
                 Tagger tagger;
                 auto audioFile = tagger.ReadFile(file.absoluteFilePath());
@@ -99,9 +99,9 @@ void DropTableWidget::CreateElement(AudioFile file) {
 }
 
 void DropTableWidget::ProcessOptions(QString tag, bool recursive, bool append) {
-    this->tag = tag.split(' ');
-    AcceptRecursive = recursive;
-    Append = append;
+    m_tag = tag.split(' ');
+    m_AcceptRecursive = recursive;
+    m_Append = append;
 }
 
 int DropTableWidget::OpenDialog() {
@@ -112,19 +112,19 @@ int DropTableWidget::OpenDialog() {
 }
 
 bool DropTableWidget::Filter(AudioFile &file) {
-    if (tag.isEmpty())
+    if (m_tag.isEmpty())
         return true;
-    if (tag[1].isEmpty())
+    if (m_tag[1].isEmpty())
         return true;
-    if (tag[0] == "Title")
-        return tag[1] == file.title;
-    else if (tag[0] == "Artist")
-        return tag[1] == file.artist;
-    else if (tag[0] == "Album")
-        return tag[1] == file.album;
-    else if (tag[0] == "Genre")
-        return tag[1] == file.genre;
-    else if (tag[0] == "Year")
-        return tag[1].toUInt() == file.year;
+    if (m_tag[0] == "Title")
+        return m_tag[1] == file.title;
+    else if (m_tag[0] == "Artist")
+        return m_tag[1] == file.artist;
+    else if (m_tag[0] == "Album")
+        return m_tag[1] == file.album;
+    else if (m_tag[0] == "Genre")
+        return m_tag[1] == file.genre;
+    else if (m_tag[0] == "Year")
+        return m_tag[1].toUInt() == file.year;
     return false;
 }
