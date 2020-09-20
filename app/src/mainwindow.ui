@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>578</width>
-    <height>264</height>
+    <height>281</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -147,7 +147,6 @@
     </property>
     <addaction name="actionClear_Table"/>
     <addaction name="separator"/>
-    <addaction name="actionRecursive"/>
    </widget>
    <widget class="QMenu" name="menuOpen_Loger">
     <property name="title">
@@ -190,6 +189,7 @@
     <signal>Notify(QString)</signal>
     <slot>ClearTable()</slot>
     <slot>ProccessType(bool)</slot>
+    <slot>ProcessOptions(bool)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -216,22 +216,6 @@
     <hint type="destinationlabel">
      <x>288</x>
      <y>252</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionRecursive</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>tableWidget</receiver>
-   <slot>ProccessType(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>288</x>
-     <y>117</y>
     </hint>
    </hints>
   </connection>

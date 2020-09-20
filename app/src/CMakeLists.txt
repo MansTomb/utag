@@ -4,6 +4,7 @@ set(SOURCES
     DirProcess.cpp DirProcess.h
     tagger.cpp tagger.h
     logger.cpp logger.h
+    dropdialog.ui dropdialog.cpp dropdialog.h
 )
 
 add_library(src ${SOURCES})

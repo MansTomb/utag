@@ -1,5 +1,6 @@
 #include "droptablewidget.h"
 #include "DirProcess.h"
+#include "dropdialog.h"
 #include <QDebug>
 
 DropTableWidget::DropTableWidget(QWidget *parent) : QTableWidget(parent) {
@@ -19,8 +20,10 @@ void DropTableWidget::dragLeaveEvent(QDragLeaveEvent *event) {
 
 void DropTableWidget::dropEvent(QDropEvent *event) {
     const QMimeData *mimeData = event->mimeData();
-    if (mimeData->hasUrls()) {
+    if (mimeData->hasUrls() && OpenDialog()) {
         QList<QUrl> urlList = mimeData->urls();
+        if (!Append)
+            ClearTable();
         UpdateTable(urlList);
         event->acceptProposedAction();
     }
@@ -37,7 +40,9 @@ void DropTableWidget::UpdateTable(QString directory) {
         for (const auto &file : processer.Process(directory, AcceptRecursive)) {
             if (findItems(file.absoluteFilePath(), Qt::MatchExactly).isEmpty()) {
                 Tagger tagger;
-                CreateElement(tagger.ReadFile(file.absoluteFilePath()));
+                auto audioFile = tagger.ReadFile(file.absoluteFilePath());
+                if (Filter(audioFile))
+                    CreateElement(audioFile);
             }
         }
     }
@@ -90,7 +95,33 @@ void DropTableWidget::CreateElement(AudioFile file) {
     setItem(rowCount() - 1, 5, item);
 }
 
-void DropTableWidget::ProccessType(bool type) {
-    AcceptRecursive = type;
+void DropTableWidget::ProcessOptions(QString tag, bool recursive, bool append) {
+    this->tag = tag.split(' ');
+    AcceptRecursive = recursive;
+    Append = append;
 }
 
+int DropTableWidget::OpenDialog() {
+    DropDialog *dialog = new DropDialog();
+    QObject::connect(dialog, &DropDialog::ReturnValues,
+                     this, &DropTableWidget::ProcessOptions);
+    return dialog->exec();
+}
+
+bool DropTableWidget::Filter(AudioFile &file) {
+    if (tag.isEmpty())
+        return true;
+    if (tag[1].isEmpty())
+        return true;
+    if (tag[0] == "Title")
+        return tag[1] == file.title;
+    else if (tag[0] == "Artist")
+        return tag[1] == file.artist;
+    else if (tag[0] == "Album")
+        return tag[1] == file.album;
+    else if (tag[0] == "Genre")
+        return tag[1] == file.genre;
+    else if (tag[0] == "Year")
+        return tag[1] == file.year;
+    return false;
+}

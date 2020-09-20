@@ -24,13 +24,17 @@ class DropTableWidget : public QTableWidget {
 
 public slots:
     void ClearTable();
-    void ProccessType(bool type);
+    void ProcessOptions(QString tag, bool recursive, bool append);
 signals:
     void Notify(QString message);
  private:
     bool AcceptRecursive = {false};
+    bool Append = {false};
+    QStringList tag;
 
     void UpdateTable(QList<QUrl> &urlList);
     void CreateElement(AudioFile file);
     QList<int> getRowsToDelete() const;
+    int OpenDialog();
+    bool Filter(AudioFile& file);
 };
