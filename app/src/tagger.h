@@ -8,7 +8,7 @@ struct AudioFile {
     QString artist;
     QString album;
     QString genre;
-    QString year;
+    unsigned int year;
     const QString absPath;
 
     bool isWrong() {

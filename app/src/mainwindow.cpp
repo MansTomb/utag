@@ -23,12 +23,15 @@ void MainWindow::on_ApplyButton_clicked()
     Tagger tagger;
 
     for (int i = 0; i < table->rowCount(); ++i) {
+        int year = table->item(i, 4)->text().toInt();
+        if (year < 0)
+            year = 0;
         tagger.UpdateTagsInFile({
             table->item(i, 0)->text(),
             table->item(i, 1)->text(),
             table->item(i, 2)->text(),
             table->item(i, 3)->text(),
-            table->item(i, 4)->text(),
+            static_cast<unsigned int>(year),
             table->item(i, 5)->text()
         });
     }

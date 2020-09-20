@@ -4,6 +4,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories(./src/)
 include_directories(../cmake-build-debug/app/src/src_autogen/include)
+include_directories(../3dparty/taglib/build/include)
 
 add_compile_options(
         #        -std=c++20
@@ -12,6 +13,7 @@ add_compile_options(
         #                -Wextra
         #                -Wpedantic
         -Wno-unused-parameter
+        -DTAGLIB_STATIC
 )
 
 set(CMAKE_AUTOUIC ON)
@@ -20,6 +22,7 @@ set(CMAKE_AUTORCC ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Core Gui REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Core Gui REQUIRED)
+link_directories(../3dparty/taglib/build/lib)
 
 add_subdirectory(src)
 
@@ -27,4 +30,5 @@ add_executable(${CMAKE_PROJECT_NAME} main.cpp)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core
         Qt${QT_VERSION_MAJOR}::Widgets
         Qt${QT_VERSION_MAJOR}::Gui
-        src)
+        src
+        libtag.a)

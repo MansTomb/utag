@@ -89,7 +89,10 @@ void DropTableWidget::CreateElement(AudioFile file) {
     setItem(rowCount() - 1, 1, new QTableWidgetItem(file.artist));
     setItem(rowCount() - 1, 2, new QTableWidgetItem(file.album));
     setItem(rowCount() - 1, 3, new QTableWidgetItem(file.genre));
-    setItem(rowCount() - 1, 4, new QTableWidgetItem(file.year));
+    QTableWidgetItem *year = new QTableWidgetItem();
+    if (file.year != 0)
+        year->setData(Qt::EditRole, file.year);
+    setItem(rowCount() - 1, 4, year);
     QTableWidgetItem *item = new QTableWidgetItem(file.absPath);
     item->setFlags(item->flags() ^ Qt::ItemIsEditable ^ Qt::ItemIsSelectable);
     setItem(rowCount() - 1, 5, item);
@@ -122,6 +125,6 @@ bool DropTableWidget::Filter(AudioFile &file) {
     else if (tag[0] == "Genre")
         return tag[1] == file.genre;
     else if (tag[0] == "Year")
-        return tag[1] == file.year;
+        return tag[1].toUInt() == file.year;
     return false;
 }
