@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <QtWidgets/QStyleFactory>
 
 int main(int argc, char *argv[])
 {

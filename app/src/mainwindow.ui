@@ -15,6 +15,22 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
+    <item row="2" column="0">
+     <widget class="QPushButton" name="ApplyButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>Apply Changes</string>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -111,22 +127,6 @@
       </item>
      </layout>
     </item>
-    <item row="2" column="0">
-     <widget class="QPushButton" name="ApplyButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="text">
-       <string>Apply Changes</string>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -147,6 +147,7 @@
     </property>
     <addaction name="actionClear_Table"/>
     <addaction name="separator"/>
+    <addaction name="actionDark_Theme"/>
    </widget>
    <widget class="QMenu" name="menuOpen_Loger">
     <property name="title">
@@ -177,6 +178,14 @@
    </property>
    <property name="text">
     <string>Open Logs</string>
+   </property>
+  </action>
+  <action name="actionDark_Theme">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Dark Theme</string>
    </property>
   </action>
  </widget>
@@ -267,5 +276,24 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionDark_Theme</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ChangeTheme(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>288</x>
+     <y>140</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>ChangeTheme(bool)</slot>
+ </slots>
 </ui>

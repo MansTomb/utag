@@ -15,7 +15,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(const QString& initialFolder = "", QWidget *parent = nullptr);
     ~MainWindow();
-
+ public slots:
+    void ChangeTheme(bool toggler);
 private slots:
     void on_ApplyButton_clicked();
 
