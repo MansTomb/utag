@@ -28,6 +28,10 @@ void DropTableWidget::UpdateTable(QString directory) {
     try {
         for (const auto &file : processer.Process(directory, m_AcceptRecursive)) {
             if (findItems(file.absoluteFilePath(), Qt::MatchExactly).isEmpty()) {
+                if (!file.isReadable() || !file.isWritable()) {
+                    emit Notify(file.fileName().append(" not readable or writable!"));
+                    continue;
+                }
                 Tagger tagger;
                 auto audioFile = tagger.ReadFile(file.absoluteFilePath());
                 if (Filter(audioFile))

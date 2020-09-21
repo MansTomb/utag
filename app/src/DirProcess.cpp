@@ -25,7 +25,7 @@ QDir DirProcess::getDir(const QUrl &directory) const {
 
 QList<QFileInfo> DirProcess::ProcessFile(const QString &directory) const {
     auto file = getFile(directory);
-    if (file.exists() && file.isFile() && file.isReadable() && file.isWritable())
+    if (file.exists() && file.isFile())
         return QList<QFileInfo>() += file;
     return QList<QFileInfo>();
 }
@@ -35,7 +35,7 @@ QList<QFileInfo> DirProcess::ProcessDirectory(const QString &directory) {
     QList<QFileInfo> list = dir.entryInfoList();
 
     list.erase(std::remove_if(list.begin(), list.end(), [](QFileInfo &item) {
-        return item.isDir() || !item.isReadable() || !item.isWritable() || !item.fileName().contains(QRegExp(R"(\.mp3$|\.flac$|\.wav$|\.ogg$)"));
+        return item.isDir() || !item.fileName().contains(QRegExp(R"(\.mp3$|\.flac$|\.wav$|\.ogg$)"));
     }), list.end());
     return list;
 }
@@ -49,7 +49,7 @@ QList<QFileInfo> DirProcess::ProcessDirectoryRecursively(const QString &director
         return i.fileName() != "." && i.fileName() != ".." && i.exists() && i.isDir() && i.isReadable();
     });
     list.erase(std::remove_if(list.begin(), list.end(), [](QFileInfo &item) {
-        return item.isDir() || !item.isReadable() || !item.isWritable() || !item.fileName().contains(QRegExp(R"(\.mp3$|\.flac$|\.wav$|\.ogg$)"));
+        return item.isDir() || !item.fileName().contains(QRegExp(R"(\.mp3$|\.flac$|\.wav$|\.ogg$)"));
     }), list.end());
     for (const auto &item : listOfDirs)
         list += ProcessDirectoryRecursively(item.absoluteFilePath());
