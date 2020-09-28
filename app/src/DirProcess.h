@@ -2,6 +2,8 @@
 
 #include <QSet>
 
+#define FILEFILTER R"(\.aifc$|\.mp3$|\.flac$|\.wav$|\.ogg$)"
+
 class DirProcess {
  public:
     QList<QFileInfo> Process(const QString& directory, bool Recursive);

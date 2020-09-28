@@ -69,7 +69,7 @@ QList<int> DropTableWidget::getRowsToDelete() const {
 
     for (const auto &item : selected)
         rows.append(item->row());
-    qSort(rows);
+    std::sort(rows.begin(), rows.end());
     rows.erase(std::unique(rows.begin(), rows.end()), rows.end());
     return rows;
 }
@@ -109,6 +109,8 @@ int DropTableWidget::OpenDialog() {
 }
 
 bool DropTableWidget::Filter(AudioFile &file) {
+    if (file.isWrong())
+        return false;
     if (m_tag.isEmpty())
         return true;
     if (m_tag[1].isEmpty())
