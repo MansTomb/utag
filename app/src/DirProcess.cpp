@@ -31,9 +31,6 @@ QList<QFileInfo> DirProcess::ProcessDirectory(const QString &directory) {
     list.erase(std::remove_if(list.begin(), list.end(), [](QFileInfo &item) {
         return item.isDir() || !item.fileName().contains(QRegExp(FILEFILTER));
     }), list.end());
-    for (const auto &item : list) {
-        std::cout << "::" << item.absolutePath().toStdString() << std::endl;
-    }
     return list;
 }
 
@@ -50,9 +47,6 @@ QList<QFileInfo> DirProcess::ProcessDirectoryRecursively(const QString &director
     }), list.end());
     for (const auto &item : listOfDirs)
         list += ProcessDirectoryRecursively(item.absoluteFilePath());
-    for (const auto &item : list) {
-        std::cout << item.absolutePath().toStdString() << std::endl;
-    }
     return list;
 }
 
