@@ -21,7 +21,6 @@ add_compile_options(
     -Wall
     -Wextra
     -Wpedantic
-    -Wno-unused-parameter
 )
 
 set(CMAKE_AUTOUIC ON)
