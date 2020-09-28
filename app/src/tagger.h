@@ -16,14 +16,13 @@ struct AudioFile {
     }
 };
 
-class Tagger : public QObject
-{
-    Q_OBJECT
-public:
+class Tagger : public QObject {
+ Q_OBJECT
+ public:
     explicit Tagger(QObject *parent = nullptr);
-    AudioFile ReadFile(const QString& absPath);
+    AudioFile ReadFile(const QString &absPath);
     void UpdateTagsInFile(AudioFile file);
-signals:
+ signals:
     void Notify(QString message);
 };
 

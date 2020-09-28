@@ -6,7 +6,7 @@
 
 class DirProcess {
  public:
-    QList<QFileInfo> Process(const QString& directory, bool Recursive);
+    QList<QFileInfo> Process(const QString &directory, bool Recursive);
  private:
     QDir getDir(const QUrl &directory) const;
     QFileInfo getFile(const QUrl &file) const;

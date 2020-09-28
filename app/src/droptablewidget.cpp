@@ -39,7 +39,7 @@ void DropTableWidget::UpdateTable(QString directory) {
             }
         }
     }
-    catch (std::invalid_argument& e) {
+    catch (std::invalid_argument &e) {
         emit Notify(e.what());
         return;
     }
@@ -58,8 +58,7 @@ void DropTableWidget::keyPressEvent(QKeyEvent *event) {
         QList<int> rows = getRowsToDelete();
         for (int i = rows.count() - 1; i >= 0; i--)
             removeRow(rows[i]);
-    }
-    else
+    } else
         QAbstractItemView::keyPressEvent(event);
 }
 

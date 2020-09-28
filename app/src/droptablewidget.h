@@ -9,23 +9,23 @@
 #include "tagger.h"
 
 class DropTableWidget : public QTableWidget {
-    Q_OBJECT
+ Q_OBJECT
 
  public:
     explicit DropTableWidget(QWidget *parent = Q_NULLPTR);
     void UpdateTable(QString directory);
  protected:
-    void dragEnterEvent(QDragEnterEvent *event) override {event->acceptProposedAction();}
-    void dragMoveEvent(QDragMoveEvent *event) override {event->accept();}
-    void dragLeaveEvent(QDragLeaveEvent *event) override {event->accept();}
+    void dragEnterEvent(QDragEnterEvent *event) override { event->acceptProposedAction(); }
+    void dragMoveEvent(QDragMoveEvent *event) override { event->accept(); }
+    void dragLeaveEvent(QDragLeaveEvent *event) override { event->accept(); }
     void dropEvent(QDropEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void commitData(QWidget *editor) override;
 
-public slots:
+ public slots:
     void ClearTable();
     void ProcessOptions(QString tag, bool recursive, bool append);
-signals:
+ signals:
     void Notify(QString message);
  private:
     bool m_AcceptRecursive = {false};
@@ -36,5 +36,5 @@ signals:
     void CreateElement(AudioFile file);
     QList<int> getRowsToDelete() const;
     int OpenDialog();
-    bool Filter(AudioFile& file);
+    bool Filter(AudioFile &file);
 };

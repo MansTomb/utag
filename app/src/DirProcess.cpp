@@ -1,5 +1,4 @@
 #include <QtCore/QDir>
-#include <QtCore/QMimeData>
 #include <QtGui/QDropEvent>
 #include <QDebug>
 #include <iostream>
@@ -43,7 +42,7 @@ QList<QFileInfo> DirProcess::ProcessDirectoryRecursively(const QString &director
     QList<QFileInfo> list = dir.entryInfoList();
     QList<QFileInfo> listOfDirs;
 
-    std::copy_if(list.begin(), list.end(), std::back_inserter(listOfDirs), [](QFileInfo& i) {
+    std::copy_if(list.begin(), list.end(), std::back_inserter(listOfDirs), [](QFileInfo &i) {
         return i.fileName() != "." && i.fileName() != ".." && i.exists() && i.isDir() && i.isReadable();
     });
     list.erase(std::remove_if(list.begin(), list.end(), [](QFileInfo &item) {

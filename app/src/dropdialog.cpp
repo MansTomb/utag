@@ -3,15 +3,14 @@
 
 DropDialog::DropDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DropDialog)
-{
+    ui(new Ui::DropDialog) {
     ui->setupUi(this);
 }
 
-DropDialog::~DropDialog()
-{
+DropDialog::~DropDialog() {
     delete ui;
 }
+
 void DropDialog::accept() {
     emit ReturnValues(ui->lineEdit->text().prepend(" ").prepend(ui->comboBox->currentText()),
                       ui->checkBox->isChecked(),

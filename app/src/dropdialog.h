@@ -7,11 +7,10 @@ namespace Ui {
 class DropDialog;
 }
 
-class DropDialog : public QDialog
-{
-    Q_OBJECT
+class DropDialog : public QDialog {
+ Q_OBJECT
 
-public:
+ public:
     explicit DropDialog(QWidget *parent = nullptr);
     ~DropDialog();
     void accept() override;
@@ -19,7 +18,7 @@ public:
  signals:
     void ReturnValues(QString tag, bool recursive, bool append);
 
-private:
+ private:
     Ui::DropDialog *ui;
 };
 

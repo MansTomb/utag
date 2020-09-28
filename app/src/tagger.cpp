@@ -3,7 +3,6 @@
 #include <QtCore/QFileInfo>
 #include <QDebug>
 #include <taglib/fileref.h>
-#include <taglib/tag.h>
 
 Tagger::Tagger(QObject *parent) : QObject(parent) {
 
@@ -22,8 +21,9 @@ AudioFile Tagger::ReadFile(const QString &absPath) {
                 info.absoluteFilePath()
         };
     emit Notify(info.absoluteFilePath().append(" is not exist or has bad permissions!"));
-    return {"","", "", "", 0, "WRONGFILE"};
+    return {"", "", "", "", 0, "WRONGFILE"};
 }
+
 void Tagger::UpdateTagsInFile(AudioFile file) {
     QFileInfo info(file.absPath);
     TagLib::FileRef f(file.absPath.toStdString().c_str());
@@ -36,7 +36,6 @@ void Tagger::UpdateTagsInFile(AudioFile file) {
         if (file.year != 0)
             f.tag()->setYear(file.year);
         f.save();
-    }
-    else
+    } else
         emit Notify("Taglib FileRef is NULL!");
 }
