@@ -16,13 +16,12 @@ include_directories(../build/3dparty/taglib/)
 include_directories(../cmake-build-debug/3dparty/taglib)
 
 add_compile_options(
-        #        -std=c++20
-        #                -Werror
-        #                -Wall
-        #                -Wextra
-        #                -Wpedantic
-        -Wno-unused-parameter
-#        -DTAGLIB_STATIC
+    -std=c++17
+    -Werror
+    -Wall
+    -Wextra
+    -Wpedantic
+    -Wno-unused-parameter
 )
 
 set(CMAKE_AUTOUIC ON)
